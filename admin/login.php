@@ -30,7 +30,7 @@
 
             // function to check if email already exists
             function emailExists($conn, $email) {
-                $sql = "SELECT * FROM new_trend_user WHERE EMAIL = ?;";
+                $sql = "SELECT * FROM admin WHERE email = ?;";
                 $stmt = mysqli_stmt_init($conn);
         
                 if(!mysqli_stmt_prepare($stmt, $sql)) {
@@ -59,7 +59,7 @@
                 die();
             }
             
-            $passwordHashed = $emailExists['PASSWORD'];
+            $passwordHashed = $emailExists['password'];
 
             $checkPassword = password_verify($password, $passwordHashed);
 
@@ -68,14 +68,14 @@
                 die();
             } elseif($checkPassword === true) {
             // }else{
-                $query = "SELECT * FROM new_trend_user WHERE ADMIN_ID = '" .$emailExists['ADMIN_ID']. "' AND EMAIL = '" .$emailExists['EMAIL']. "';";
+                $query = "SELECT * FROM admin WHERE admin_id = '" .$emailExists['admin_id']. "' AND email = '" .$emailExists['email']. "';";
                 $result = mysqli_query($conn, $query);
                 $count = mysqli_num_rows($result);
                 if($count === 1) {    
                     session_start();
-                    $_SESSION['admin_id'] = $emailExists['ADMIN_ID'];
-                    $_SESSION['level'] = $emailExists['LEVEL'];
-                    $_SESSION['email'] = $emailExists['EMAIL'];
+                    $_SESSION['admin_id'] = $emailExists['admin_id'];
+                    $_SESSION['user_level'] = $emailExists['user_level'];
+                    $_SESSION['email'] = $emailExists['email'];
 
                     $result = mysqli_query($conn, $query);
 
