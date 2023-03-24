@@ -18,11 +18,11 @@
             <div class="header-box px-2 pt-3 pb-2 d-flex justify-content-between">
                 <?php
                     if(isset($_SESSION['admin_id'])){
-                        $sql_level = "SELECT * FROM new_trend_user WHERE ADMIN_ID = $admin_id_session;";
+                        $sql_level = "SELECT * FROM admin WHERE admin_id = $admin_id_session;";
                         $result_level = mysqli_query($conn, $sql_level);
                         if(mysqli_num_rows($result_level) > 0){
                             while($row_level = mysqli_fetch_assoc($result_level)){
-                                $level = $row_level['LEVEL'];
+                                $level = $row_level['user_level'];
                             }
                             echo '<h1 class="fs-4"><a href="dashboard.php" class="text-decoration-none"><span class="axgg text-white rounded shadow px-2 me-2 p-1">AXGG</span><span class="text-white text-uppercase">' .$level. '</span></a></h1>';
                             // echo '<h1 class="fs-4"><a href="dashboard.php" class="text-decoration-none"><span class="bg-white text-dark rounded shadow px-2 me-2 p-1">AXGG</span><span class="text-white">Clinic</span></a></h1>';
@@ -36,11 +36,11 @@
                 <div class="d-flex mt-1 ps-2 pb-1">
                     <?php
                         if(isset($_SESSION['admin_id'])){
-                            $sql = "SELECT * FROM new_trend_user WHERE ADMIN_ID = $admin_id_session;";
+                            $sql = "SELECT * FROM admin WHERE admin_id = $admin_id_session;";
                             $result = mysqli_query($conn, $sql);
                             if(mysqli_num_rows($result) > 0){
                                 while($row = mysqli_fetch_assoc($result)){
-                                    $name = $row['NAME'];
+                                    $name = $row['name'];
                                 }
                                 // echo '<li class="px-3 py-2 d-block text-white">' .$name. '</li>';
                             }
@@ -57,6 +57,12 @@
                         echo '<li class=""><a href="dashboard.php" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-house"></i> Dashboard</a></li>';
                     }else{
                         echo '<li class="active"><a href="dashboard.php" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-house"></i> Dashboard</a></li>';
+                    }
+
+                    if($url !== 'localhost/sia/admin/category.php'){
+                        echo '<li class=""><a href="category.php" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-vest"></i> Categories</a></li>';
+                    }else{
+                        echo '<li class="active"><a href="category.php" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-vest"></i> Categories</a></li>';
                     }
 
                     if($url !== 'localhost/sia/admin/product.php'){
@@ -111,11 +117,11 @@
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <?php
                                         if(isset($_SESSION['admin_id'])){
-                                            $sql = "SELECT * FROM new_trend_user WHERE ADMIN_ID = $admin_id_session;";
+                                            $sql = "SELECT * FROM admin WHERE admin_id = $admin_id_session;";
                                             $result = mysqli_query($conn, $sql);
                                             if(mysqli_num_rows($result) > 0){
                                                 while($row = mysqli_fetch_assoc($result)){
-                                                    $name = $row['NAME'];
+                                                    $name = $row['name'];
                                                 }
                                                 echo $name;
                                             }
