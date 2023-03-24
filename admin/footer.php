@@ -40,116 +40,6 @@
         } );
     </script>
 
-    <!-- start of script for view user modal -->
-    <script>
-        $(document).ready(function () {
-            // $('body').on('click', '.edit', function(event) {
-            $('body').on('click', '.view', function(event) {
-
-                $('#view_user_modal').modal('show');
-
-                $tr = $(this).closest('tr');
-
-                var data = $tr.children("td").map(function () {
-                    return $(this).text();
-                }).get();
-
-                console.log(data);
-
-                $('#view_user_id').val(data[1])
-                $('#view_user_role').val(data[2]);
-                $('#view_username').val(data[3]);
-                $('#view_first_name').val(data[4]);
-                $('#view_last_name').val(data[5]);
-                $('#view_email').val(data[6]);
-                $('#view_phone_number').val(data[7]);
-                $('#view_is_verified').val(data[8]);
-                $('#view_last_login').val(data[9]);
-                $('#view_user_date_added').val(data[10]);
-                $('#view_user_info_last_updated').val(data[13]);
-                
-            });
-        });
-    </script>
-    <!-- end of script for view user modal -->
-
-    <!-- start of script for edit user modal -->
-    <script>
-        $(document).ready(function () {
-            // $('body').on('click', '.edit', function(event) {
-            $('body').on('click', '.edit', function(event) {
-
-                $('#edit_service_modal').modal('show');
-
-                $tr = $(this).closest('tr');
-
-                var data = $tr.children("td").map(function () {
-                    return $(this).text();
-                }).get();
-
-                console.log(data);
-
-                $('#edit_user_id').val(data[1])
-                $('#edit_user_role').val(data[2]);
-                $('#edit_username').val(data[3]);
-                $('#edit_first_name').val(data[4]);
-                $('#edit_last_name').val(data[5]);
-                $('#edit_email').val(data[6]);
-                $('#edit_phone_number').val(data[7]);
-
-            });
-        });
-    </script>
-    <!-- end of script for edit user modal -->
-
-    <!-- start of script for delete user modal -->
-    <script>
-        $(document).ready(function () {
-
-            $('body').on('click', '.delete', function(event) {
-
-                $('#delete_user_modal').modal('show');
-
-                $tr = $(this).closest('tr');
-
-                var data = $tr.children("td").map(function () {
-                    return $(this).text();
-                }).get();
-
-                console.log(data);
-
-                $('#delete_user_id').val(data[1]);
-
-            });
-        });
-    </script>
-    <!-- end of script for delete user modal -->
-
-    <!-- start of script for view category modal -->
-    <script>
-        $(document).ready(function () {
-            // $('body').on('click', '.edit', function(event) {
-            $('body').on('click', '.view', function(event) {
-
-                $('#view_category_modal').modal('show');
-
-                $tr = $(this).closest('tr');
-
-                var data = $tr.children("td").map(function () {
-                    return $(this).text();
-                }).get();
-
-                console.log(data);
-
-                $('#view_category_id').val(data[0])
-                $('#view_category').val(data[1]);
-                $('#view_category_date_added').val(data[2]);
-                $('#view_category_last_updated').val(data[3]);
-            });
-        });
-    </script>
-    <!-- end of script for view category modal -->
-    
     <!-- start of script for edit category modal -->
     <script>
         $(document).ready(function () {
@@ -166,8 +56,8 @@
 
                 console.log(data);
 
-                $('#edit_category_id').val(data[0])
-                $('#edit_category').val(data[1]);
+                $('#edit_cat_id').val(data[0])
+                $('#edit_cat_name').val(data[1]);
             });
         });
     </script>
@@ -189,7 +79,7 @@
 
                 console.log(data);
 
-                $('#delete_category_id').val(data[0]);
+                $('#delete_cat_id').val(data[0]);
             });
         });
     </script>
