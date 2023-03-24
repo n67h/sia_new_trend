@@ -130,8 +130,7 @@
 
                 console.log(data);
 
-                $('#edit_service_id').val(data[0]);
-                $('#edit_category_id').val(data[1]);
+                $('#edit_prod_id').val(data[1]);
                 $('#edit_category').val(data[2]);
                 $('#edit_service').val(data[3]);
                 $('#edit_description').val(data[4]);
