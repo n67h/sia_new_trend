@@ -56,7 +56,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12 col-6 mt-3 mb-5">
                                                         <div class="form-group">
-                                                            <label for="add_cat_name" class="ps-2 pb-2">Category name</label>
+                                                            <label for="add_cat_name" class="ps-2 pb-2 fs-5">Category name</label>
                                                             <input type="text" class="form-control" name="add_cat_name" id="add_cat_name" value="" required>
                                                         </div>
                                                     </div>
@@ -184,7 +184,7 @@
                                         <div class="row">
                                             <div class="col-md-12 col-6 mt-3 mb-5">
                                                 <div class="form-group">
-                                                    <label for="edit_cat_name" class="ps-2 pb-2">Category</label>
+                                                    <label for="edit_cat_name" class="ps-2 pb-2 fs-5">Category</label>
                                                     <input type="text" class="form-control" name="edit_cat_name" id="edit_cat_name" value="" required>
                                                 </div>
                                             </div>
@@ -240,7 +240,7 @@
                                             <div class="col-md-12 col-12 mt-3">
                                                 <div class="form-group">
                                                     <input type="hidden" name="delete_cat_id" id="delete_cat_id" class="form-control mb-3">
-                                                    <h5>Are you sure you want to delete this category?</h5>
+                                                    <h5 class="fs-5">Are you sure you want to delete this category?</h5>
                                                 </div>
                                             </div>
                                         </div>
