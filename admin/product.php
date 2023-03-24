@@ -12,21 +12,59 @@
     <div class="container ms-5">
         <?php
             if(isset($_POST['add'])){
-                $add_service_category = mysqli_real_escape_string($conn, $_POST['add_service_category']);
-                $add_service = mysqli_real_escape_string($conn, $_POST['add_service']);
-                $add_description = mysqli_real_escape_string($conn, $_POST['add_description']);
-                $add_price = mysqli_real_escape_string($conn, $_POST['add_price']);
+                $add_prod_cat = mysqli_real_escape_string($conn, $_POST['add_prod_cat']);
+                $add_prod_name = mysqli_real_escape_string($conn, $_POST['add_prod_name']);
+                $add_prod_price = mysqli_real_escape_string($conn, $_POST['add_prod_price']);
+                $add_prod_desc = mysqli_real_escape_string($conn, $_POST['add_prod_desc']);
                 
+                //validate product image
+                $file = $_FILES['add_prod_img'];
+                $file_name = $_FILES['add_prod_img']['name'];
+                $file_tmp_name = $_FILES['add_prod_img']['tmp_name'];
+                $file_size = $_FILES['add_prod_img']['size'];
+                $file_error = $_FILES['add_prod_img']['error'];
+                $file_type = $_FILES['add_prod_img']['type'];
                 
-                if(empty($add_service_category) || empty($add_service) || empty($add_description) || empty($add_price)){
+                $file_ext = explode('.', $file_name);
+                $file_actual_ext = strtolower(end($file_ext));
+
+                $allowed = array('jpg', 'jpeg', 'png',);
+                
+                if(empty($add_prod_cat) || empty($add_prod_name) || empty($add_prod_price) || empty($add_prod_desc)){
+                   $error_message = "All fields are required!";
+                    echo "<script type='text/javascript'>alert('$error_message');</script>";
+                }elseif($_FILES["add_prod_img"]["error"] == 4){
+                    //means there is no file uploaded
+                    // $file_destination = $image_value;
                     $error_message = "All fields are required!";
                     echo "<script type='text/javascript'>alert('$error_message');</script>";
                 }else{
-                    $sql = "INSERT INTO service (category_id, service, description, price) VALUES ($add_service_category, '$add_service', '$add_description', '$add_price');";
+                    $sql = "INSERT INTO products (cat_id, prod_name, prod_price, prod_desc) VALUES ($add_prod_cat, '$add_prod_name', $add_prod_price, '$add_prod_desc');";
     
                     if(mysqli_query($conn, $sql)){
+                        $prod_id = mysqli_insert_id($conn);
+                        
+                        if(in_array($file_actual_ext, $allowed)) {
+                            if($file_error === 0) {
+                                if($file_size < 5000000) {
+                                    $file_name_new = $prod_id. "." .$file_actual_ext;
+                                    $file_destination = 'prod_imgs/' .$file_name_new;
+                                    move_uploaded_file($file_tmp_name, $file_destination);
+
+                                    $sql_update_img = "UPDATE products SET prod_img = '$file_destination' WHERE prod_id = $prod_id;";
+                                    if(mysqli_query($conn, $sql_update_img)){
+                                    }
+                                }else {
+                                    $image_error = ' *Your file is too big.';
+                                }
+                            }else {
+                                $image_error = ' *There was an error uploading your file.';
+                            }
+                        }else{
+                            $image_error = ' *You cannot upload file of this type.';
+                        }
                     }
-                }
+                } 
             }
         ?>
         <h3 class="text-dark mt-3 text-center">Products</h3>
@@ -41,11 +79,11 @@
                 <div class="modal-dialog modal-xl modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header bg-dark text-white">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Add service</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Add product</h1>
                             <button type="button" class="btn btn-danger close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span></button>
                         </div>
                         <!-- start of add modal form -->
-                        <form action="" method="post">
+                        <form action="" method="post" enctype="multipart/form-data">
                             <!-- start of add modal body -->                
                             <div class="modal-body">
                                 <!-- start of add modal row -->
@@ -58,51 +96,65 @@
                                             <div class="card-body">
                                                 <!-- start of add modal row -->
                                                 <div class="row">
-                                                    <div class="col-md-6 col-6 mt-3">
-                                                        <div class="form-group">
-                                                            <label for="add_service_category" class="ps-2 pb-2">Category</label>
-                                                            <select class="form-select" aria-label="Default select example" name="add_service_category" id="add_service_category" required>
-                                                                <option selected disabled>-- Select category --</option>
-                                                                <?php
-                                                                    $sql_category = "SELECT * FROM category;";
-                                                                    $result_category = mysqli_query($conn, $sql_category);
-                                                                    if(mysqli_num_rows($result_category) > 0){
-                                                                        while($row_category = mysqli_fetch_assoc($result_category)){
-                                                                            $category_id = $row_category['category_id'];
-                                                                            $category_name = $row_category['category'];
-                                                                            echo '<option value="' .$category_id. '">' .$category_name. '</option>';
-                                                                        }
-                                                                    }
-                                                                ?>
-                                                            </select>
+                                                    <div class="col-md-5 col-6 mt-4">
+                                                        <div class="mb-1">
+                                                            <img class="text-dark border border-dark border-5" src="prod_imgs/prod_img_placeholder.jpg" alt="" style="width: 40%; height: 50%;">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="add_prod_img" class="form-label fs-5 ps-2">Select image</label>
+                                                            <input class="form-control" type="file" id="add_prod_img" name="add_prod_img" required>
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-6 col-6 mt-3">
-                                                        <div class="form-group">
-                                                            <label for="add_service" class="ps-2 pb-2">Service</label>
-                                                            <input type="text" class="form-control" name="add_service" id="add_service" value="" required>
+                                                    <div class="col-md-7 col-6 mt-3">
+                                                        <div class="col-md-12 col-6">
+                                                            <div class="form-group">
+                                                                <label for="add_prod_cat" class="ps-2 pb-2 fs-5">Category</label>
+                                                                <select class="form-select" aria-label="Default select example" name="add_prod_cat" id="add_prod_cat" required>
+                                                                    <option selected disabled>-- Select category --</option>
+                                                                    <?php
+                                                                        $sql_category = "SELECT * FROM category;";
+                                                                        $result_category = mysqli_query($conn, $sql_category);
+                                                                        if(mysqli_num_rows($result_category) > 0){
+                                                                            while($row_category = mysqli_fetch_assoc($result_category)){
+                                                                                $cat_id = $row_category['cat_id'];
+                                                                                $cat_name = $row_category['cat_name'];
+                                                                                echo '<option value="' .$cat_id. '">' .$cat_name. '</option>';
+                                                                            }
+                                                                        }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12 col-6 mt-3">
+                                                            <div class="form-group">
+                                                                <label for="add_prod_name" class="ps-2 pb-2 fs-5">Product name</label>
+                                                                <input type="text" class="form-control" name="add_prod_name" id="add_prod_name" value="" required>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12 col-6 mt-3">
+                                                            <div class="form-group">
+                                                                <label for="add_prod_price" class="ps-2 pb-2 fs-5">Price</label>
+                                                                <div class="input-group mb-3">
+                                                                    <span class="input-group-text" id="basic-addon1">₱</span>
+                                                                    <input type="number" class="form-control" name="add_prod_price" id="add_prod_price" placeholder="" aria-label="" aria-describedby="basic-addon1">
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
+
                                                     
                                                     <div class="col-md-12 col-6 mt-3">
                                                         <div class="form-group">
-                                                            <label for="add_description" class="ps-2 pb-2">Service description</label>
+                                                            <label for="add_prod_desc" class="ps-2 pb-2 fs-5">Product description</label>
                                                             <div class="form-floating">
-                                                                <textarea class="form-control" placeholder="Leave a comment here" id="add_description" style="height: 100px" name="add_description"></textarea>
+                                                                <textarea class="form-control" placeholder="Leave a comment here" id="add_prod_desc" style="height: 100px" name="add_prod_desc"></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <div class="col-md-12 col-6 mt-3">
-                                                        <div class="form-group">
-                                                            <label for="add_price" class="ps-2 pb-2">Price</label>
-                                                            <div class="input-group mb-3">
-                                                                <span class="input-group-text" id="basic-addon1">₱</span>
-                                                                <input type="text" class="form-control" name="add_price" id="add_price" placeholder="" aria-label="" aria-describedby="basic-addon1">
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    
                                                 </div>
                                                 <!-- end of add modal row -->
                                             </div>
@@ -110,7 +162,7 @@
                                             <!-- start of add modal footer -->
                                             <div class="modal-footer justify-content-between">
                                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" name="add" class="btn btn-success">Save Changes</button>
+                                                <button type="submit" name="add" class="btn btn-success">Add</button>
                                             </div>
                                             <!-- end of add modal footer -->
                                         </div>
@@ -141,48 +193,40 @@
                                 <!-- start of table header -->
                                 <thead>
                                     <tr>
-                                        <th class="table-light text-uppercase">product id</th>
-                                        <th class="table-light text-uppercase">name</th>
-                                        <th class="table-light text-uppercase">description</th>
-                                        <th class="table-light text-uppercase">size</th>
-                                        <th class="table-light text-uppercase">color</th>
-                                        <th class="table-light text-uppercase">category</th>
-                                        <th class="table-light text-uppercase">price</th>
-                                        <th class="table-light text-uppercase">quantity</th>
-                                        <th class="table-light text-uppercase">sales</th>
-                                        <th class="table-light text-uppercase d-none">image</th>
-                                        <th class="table-light text-uppercase d-none">barcode</th>
-                                        <th class="table-light text-uppercase">status</th>
-                                        <th class="table-light text-uppercase">date added</th>
-                                        <th class="table-light text-uppercase">action</th>
+                                        <th class="table-light text-uppercase text-center d-none">cat id</th>
+                                        <th class="table-light text-uppercase text-center">product id</th>
+                                        <th class="table-light text-uppercase text-center">cat name</th>
+                                        <th class="table-light text-uppercase text-center">product name</th>
+                                        <th class="table-light text-uppercase text-center">product price</th>
+                                        <th class="table-light text-uppercase text-center">product description</th>
+                                        <th class="table-light text-uppercase text-center d-none">prod img</th>
+                                        <th class="table-light text-uppercase text-center">action</th>
                                     </tr>
                                 </thead>
                                 <!-- end of table header -->
                                 <!-- start of table body -->
                                 <tbody>
                                 <?php
-                                    $sql_select = "SELECT category.category_id, category.category, service.* FROM category INNER JOIN service USING (category_id) WHERE service.is_deleted != 1 ORDER BY service.service_id DESC;";
+                                    $sql_select = "SELECT category.*, products.* FROM products INNER JOIN category USING (cat_id);";
                                     $result_select = mysqli_query($conn, $sql_select);
                                     if(mysqli_num_rows($result_select) > 0){
                                         while($row_select = mysqli_fetch_assoc($result_select)){
-                                            $service_id = $row_select['service_id'];
-                                            $category_id = $row_select['category_id'];
-                                            $category = $row_select['category'];
-                                            $service = $row_select['service'];
-                                            $description = $row_select['description'];
-                                            $price = $row_select['price'];
-                                            $service_date_added = $row_select['date_added'];
-                                            $service_last_updated = $row_select['last_updated'];
+                                            $cat_id = $row_select['cat_id'];
+                                            $prod_id = $row_select['prod_id'];
+                                            $cat_name = $row_select['cat_name'];
+                                            $prod_name = $row_select['prod_name'];
+                                            $prod_price = $row_select['prod_price'];
+                                            $prod_desc = $row_select['prod_desc'];
+                                            $prod_img = $row_select['prod_img'];
                                 ?>
                                             <tr>
-                                                <td class="text-center"><?= $service_id ?></td>
-                                                <td class="text-center d-none"><?= $category_id ?></td>
-                                                <td class="text-center"><?= $category ?></td>
-                                                <td class="text-center"><?= $service ?></td>
-                                                <td class="text-center"><?= $description ?></td>
-                                                <td class="text-center"><?= $price ?></td>
-                                                <td class="text-center"><?= $service_date_added ?></td>
-                                                <td class="text-center"><?= $service_last_updated ?></td>
+                                                <td class="text-center d-none"><?= $cat_id ?></td>
+                                                <td class="text-center"><?= $prod_id ?></td>
+                                                <td class="text-center"><?= $cat_name ?></td>
+                                                <td class="text-center"><?= $prod_name ?></td>
+                                                <td class="text-center"><?= $prod_price ?></td>
+                                                <td class="text-center"><?= $prod_desc ?></td>
+                                                <td class="text-center d-none"><?= $prod_img ?></td>
                                                 <td class="text-center">
                                                     <a class="btn btn-sm btn-primary view" href="#" data-bs-toggle="modal" data-bs-target="#view_service_modal"><i class="fa-solid fa-eye"></i></a> 
                                                     <a class="btn btn-sm btn-success edit" href="#" data-bs-toggle="modal" data-bs-target="#edit_service_modal"><i class="fa-solid fa-pen-to-square"></i></a>  
