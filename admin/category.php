@@ -1,6 +1,3 @@
-<?php
-    require_once '../includes/db.inc.php';
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,13 +12,13 @@
     <div class="container ms-5">
         <?php
             if(isset($_POST['add'])){
-                $add_category = mysqli_real_escape_string($conn, $_POST['add_category']);
+                $add_cat_name = mysqli_real_escape_string($conn, $_POST['add_cat_name']);
                 
-                if(empty($add_category)){
-                    $error_message = "Category is required!";
+                if(empty($add_cat_name)){
+                    $error_message = "Category name is required!";
                     echo "<script type='text/javascript'>alert('$error_message');</script>";
                 }else{
-                    $sql = "INSERT INTO category (category) VALUES ('$add_category');";
+                    $sql = "INSERT INTO category (cat_name) VALUES ('$add_cat_name');";
     
                     if(mysqli_query($conn, $sql)){
                     }
@@ -32,12 +29,12 @@
         <!-- start of container fluid -->
         <div class="container-fluid mt-3">
             <!-- start of add category modal button -->
-            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#add_category_modal">Add category</button>
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#add_category_modal">New <i class="fa-solid fa-plus"></i></button>
             <!-- end of add category modal button -->
 
             <!-- start of add category modal -->
             <div class="modal fade" id="add_category_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header bg-dark text-white">
                             <h1 class="modal-title fs-5" id="exampleModalLabel">Add category</h1>
@@ -59,8 +56,8 @@
                                                 <div class="row">
                                                     <div class="col-md-12 col-6 mt-3 mb-5">
                                                         <div class="form-group">
-                                                            <label for="add_category" class="ps-2 pb-2">Category</label>
-                                                            <input type="text" class="form-control" name="add_category" id="add_category" value="" required>
+                                                            <label for="add_cat_name" class="ps-2 pb-2">Category name</label>
+                                                            <input type="text" class="form-control" name="add_cat_name" id="add_cat_name" value="" required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -101,33 +98,26 @@
                                 <!-- start of table header -->
                                 <thead>
                                     <tr>
-                                        <th class="table-light text-uppercase">category id</th>
-                                        <th class="table-light text-uppercase">category</th>
-                                        <th class="table-light text-uppercase">date added</th>
-                                        <th class="table-light text-uppercase">last updated</th>
-                                        <th class="table-light text-uppercase">action</th>
+                                        <th class="table-light text-uppercase text-center">category id</th>
+                                        <th class="table-light text-uppercase text-center">category</th>
+                                        <th class="table-light text-uppercase text-center">action</th>
                                     </tr>
                                 </thead>
                                 <!-- end of table header -->
                                 <!-- start of table body -->
                                 <tbody>
                                 <?php
-                                    $sql_select = "SELECT * FROM category WHERE is_deleted != 1 ORDER BY category_id DESC;";
+                                    $sql_select = "SELECT * FROM category ORDER BY cat_id DESC;";
                                     $result_select = mysqli_query($conn, $sql_select);
                                     if(mysqli_num_rows($result_select) > 0){
                                         while($row_select = mysqli_fetch_assoc($result_select)){
-                                            $category_id = $row_select['category_id'];
-                                            $category = $row_select['category'];
-                                            $category_date_added = $row_select['date_added'];
-                                            $category_last_updated = $row_select['last_updated'];
+                                            $cat_id = $row_select['cat_id'];
+                                            $cat_name = $row_select['cat_name'];
                                 ?>
                                             <tr>
-                                                <td class="text-center"><?= $category_id ?></td>
-                                                <td class="text-center"><?= $category ?></td>
-                                                <td class="text-center"><?= $category_date_added ?></td>
-                                                <td class="text-center"><?= $category_last_updated ?></td>
+                                                <td class="text-center"><?= $cat_id ?></td>
+                                                <td class="text-center"><?= $cat_name ?></td>
                                                 <td class="text-center">
-                                                    <a class="btn btn-sm btn-primary view" href="#" data-bs-toggle="modal" data-bs-target="#view_category_modal"><i class="fa-solid fa-eye"></i></a> 
                                                     <a class="btn btn-sm btn-success edit" href="#" data-bs-toggle="modal" data-bs-target="#edit_category_modal"><i class="fa-solid fa-pen-to-square"></i></a>  
                                                     <a class="btn btn-sm btn-danger delete" href="#" data-bs-toggle="modal" data-bs-target="#delete_category_modal"><i class="fa-solid fa-trash"></i></a>
                                                 </td>
@@ -163,85 +153,10 @@
     </div>
     <!-- end of first container -->
 
-    <!-- start of view modal -->
-    <div class="modal fade" id="view_category_modal">
-        <!-- start of view modal dialog -->
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <!-- start of view modal content -->
-            <div class="modal-content">
-                <!-- start of modal header -->
-                <div class="modal-header bg-dark border-0">
-                    <h4 class="modal-title text-white">View category</h4>
-                    <button type="button" class="btn btn-danger close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
-                    </button>
-                </div>
-                <!-- end of modal header -->
-                <!-- start of view modal form -->
-                <form action="" method="post">
-                    <!-- start of view modal body -->                
-                    <div class="modal-body">
-                        <input type="hidden" name="view_category_id" id="view_category_id">
-                        <!-- start of view modal row -->
-                        <div class="row">
-                            <!-- start of view modal col -->
-                            <div class="col-md-12">
-                                <!-- start of view modal card -->
-                                <div class="card card-primary">
-                                    <!-- start of view modal card body -->
-                                    <div class="card-body">
-                                        <!-- start of view modal row -->
-                                        <div class="row">
-                                            <div class="col-md-12 col-6 mt-3">
-                                                <div class="form-group">
-                                                    <label for="view_category" class="ps-2 pb-2">Category</label>
-                                                    <input type="text" class="form-control" name="view_category" id="view_category" value="" disabled>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 col-6 mt-3">
-                                                <div class="form-group">
-                                                    <label for="view_category_date_added" class="ps-2 pb-2">Date added</label>
-                                                    <input type="text" class="form-control" name="view_category_date_added" id="view_category_date_added" value="" disabled>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 col-6 mt-3 mb-5">
-                                                <div class="form-group">
-                                                    <label for="view_category_last_updated" class="ps-2 pb-2">Last updated</label>
-                                                    <input type="text" class="form-control" name="view_category_last_updated" id="view_category_last_updated" value="" disabled>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- end of view modal row -->
-                                    </div>
-                                    <!-- end of view modal card body -->
-                                    <!-- start of view modal footer -->
-                                    <div class="modal-footer justify-content-between">
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                    </div>
-                                    <!-- end of view modal footer -->
-                                </div>
-                                <!-- end of view modal card -->
-                            </div>
-                            <!-- end of view modal col -->
-                        </div>
-                        <!-- end of view modal row -->
-                    </div>
-                    <!-- end of view modal body -->                
-                </form>
-                <!-- end of view modal form -->
-            </div>
-            <!-- end of view modal content -->
-        </div>
-        <!-- end of view modal dialog -->
-    </div>
-    <!-- end of view modal -->
-
     <!-- start of edit category modal -->
     <div class="modal fade" id="edit_category_modal">
         <!-- start of edit modal dialog -->
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered">
             <!-- start of edit modal content -->
             <div class="modal-content">
                 <!-- start of modal header -->
@@ -256,7 +171,7 @@
                 <form action="includes/edit-category.inc.php" method="post">
                     <!-- start of edit modal body -->                
                     <div class="modal-body">
-                        <input type="hidden" name="edit_category_id" id="edit_category_id">
+                        <input type="hidden" name="edit_cat_id" id="edit_cat_id">
                         <!-- start of edit modal row -->
                         <div class="row">
                             <!-- start of edit modal col -->
@@ -269,8 +184,8 @@
                                         <div class="row">
                                             <div class="col-md-12 col-6 mt-3 mb-5">
                                                 <div class="form-group">
-                                                    <label for="edit_category" class="ps-2 pb-2">Category</label>
-                                                    <input type="text" class="form-control" name="edit_category" id="edit_category" value="" required>
+                                                    <label for="edit_cat_name" class="ps-2 pb-2">Category</label>
+                                                    <input type="text" class="form-control" name="edit_cat_name" id="edit_cat_name" value="" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -302,7 +217,7 @@
 
     <!-- start of delete category modal -->
     <div class="modal fade" id="delete_category_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Delete category</h1>
@@ -324,8 +239,8 @@
                                         <div class="row">
                                             <div class="col-md-12 col-12 mt-3">
                                                 <div class="form-group">
-                                                    <input type="hidden" name="delete_category_id" id="delete_category_id" class="form-control mb-3">
-                                                    <h3>Are you sure you want to delete this category?</h3>
+                                                    <input type="hidden" name="delete_cat_id" id="delete_cat_id" class="form-control mb-3">
+                                                    <h5>Are you sure you want to delete this category?</h5>
                                                 </div>
                                             </div>
                                         </div>
