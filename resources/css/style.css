@@ -1,0 +1,245 @@
+body {
+    background-color: #eee;
+    overflow-x: hidden;
+}
+
+
+/*====================START OF COLORS====================*/
+/*====================END OF COLORS====================*/
+
+
+
+/*====================START OF ADMIN SIDEBAR====================*/
+#sidebar {
+    background-color: #5876CE;
+    min-width: 250px;
+    max-width: 250px;
+    transition: all 0.4s;
+}
+
+.content {
+    min-height: 100vh;
+    width: 100%;
+}
+
+.sidebar li.active {
+    background-color: #404759;
+    border-radius: 8px;
+    color: #FFFFFF;
+}
+
+.sidebar li.active a, .sidebar li.active a:hover {
+    color: #FFFFFF;
+}
+
+.sidebar li a {
+    color: #FFFFFF;
+}
+
+.sidebar li a:hover {
+    background-color: #404759;
+    border-radius: 8px;
+    color: #FFFFFF;
+}
+
+/* .admin-dropdown1:hover {
+    background-color: #5876CE;
+    color: #FFFFFF;
+} */
+
+.admin-dropdown {
+    background-color: #404759;
+    color: #FFFFFF;
+}
+
+.admin-dropdown:hover {
+    background-color: #404759;
+    color: #FFFFFF;
+}
+
+.admin-dropdown-li a {
+    background-color: #404759;
+    color: #FFFFFF;
+}
+
+.admin-dropdown-li a:hover {
+    background-color: #5876CE;
+    color: #FFFFFF;
+}
+
+.admin-dropdown:hover {
+    background-color: #404759;
+    color: #FFFFFF;
+}
+
+.navbar-admin {
+    background-color: #5876CE;
+}
+
+.axgg {
+    background-color: #404759;
+}
+
+@media(max-width: 767px) {
+    #sidebar {
+        margin-left: -250px;
+        position: fixed;
+        min-height: 100vh;
+        z-index: 1;
+    }
+
+    #sidebar.active {
+        margin-left: 0;
+    }
+}
+/*====================END OF ADMIN SIDEBAR====================*/
+
+
+/*====================START OF HEADER====================*/
+.navbar-brand {
+    font-family: 'Lobster', cursive;
+    font-size: 2.4em;
+}
+
+.logo1 {
+    color: #00C896;
+    /* color: #FFB752; */
+}
+
+.logo2 {
+    color: #00A7F7; 
+}
+
+.dropdown-item:hover {
+    background-color: #292b2c;
+}
+
+.nav-link {
+    font-size: 1.2em;
+    margin-right: 20px;
+}
+
+.account:hover {
+    cursor: pointer;
+}
+/*====================END OF HEADER====================*/
+
+
+/*====================START OF INDEX====================*/
+.carousel .carousel-item {
+    height: 600px;
+    width: 100%;  
+}
+
+.carousel-item img {
+    position: absolute;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+    height: 100%;
+}
+
+/* .carousel-caption {
+    text-shadow: 2px 2px 4px #000000;
+} */
+
+.carousel-caption:hover {
+    cursor: default;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.card-img {
+    height: 55vh;
+}
+
+.card {
+    border: none;
+}
+
+.services:hover {
+    border: 2px solid black;
+}
+
+.card-body {
+    font-size: 1.4em;
+}
+
+.card-img {
+    filter: none;
+    -webkit-filter: grayscale(0);
+    border-radius: 0;
+    width: 100%;
+    object-fit: cover;
+}
+
+.card-img:hover {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+}
+
+.guitar:hover {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(90%);
+}
+
+.card .items:hover {
+    opacity: 0.1;
+}
+
+.card-img-top {
+    border-radius: 5px;
+    height: 460px;
+}
+
+.card-img-top:hover {
+    cursor: pointer;
+}
+/*====================END OF INDEX====================*/
+
+/*====================START OF REGISTER====================*/
+#phone_number::-webkit-outer-spin-button,
+#phone_number::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/*====================END OF REGISTER====================*/
+
+/*====================START OF FOOTER====================*/
+.fa-facebook:hover {
+    color: #4267B2;
+}
+
+.fa-twitter:hover {
+    color: #00acee;
+}
+
+.fa-instagram:hover {
+    color: #cd486b;
+}
+
+.fa-youtube:hover {
+    color: #FF0000;
+}
+
+.fa-github:hover {
+    color: #808080;
+}
+
+.fa-stack-overflow:hover {
+    color: #f48024;
+}
+/*====================END OF FOOTER====================*/
+
+
+
+
+/*====================START OF ADMIN SERVICE====================*/
+#add_price::-webkit-outer-spin-button,
+#add_price::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/*====================END OF ADMIN SERVICE====================*/
