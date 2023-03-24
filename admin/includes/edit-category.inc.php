@@ -1,16 +1,16 @@
 <?php
     session_start();
-    require_once '../../includes/db.inc.php';
+    require_once 'db.inc.php';
 
     if(isset($_POST['edit'])){
-        $edit_category_id = mysqli_real_escape_string($conn, $_POST['edit_category_id']);
-        $edit_category = mysqli_real_escape_string($conn, $_POST['edit_category']);
+        $edit_cat_id = mysqli_real_escape_string($conn, $_POST['edit_cat_id']);
+        $edit_cat_name = mysqli_real_escape_string($conn, $_POST['edit_cat_name']);
         
-        if(empty($edit_category)){
-            $error_message = "Category is required!";
+        if(empty($edit_cat_name)){
+            $error_message = "Category name is required!";
             echo "<script type='text/javascript'>alert('$error_message');</script>";
 
-            $error_redirect = '<h3 style="color: red; text-align: center;">Category is  required! You will be redirected to previous page in <span id="counter">5</span> second(s).</h3>
+            $error_redirect = '<h3 style="color: red; text-align: center;">Category name is required! You will be redirected to previous page in <span id="counter">5</span> second(s).</h3>
             <script type="text/javascript">
                 function countdown() {
                     var i = document.getElementById("counter");
@@ -25,7 +25,7 @@
             header("refresh:5;url=../category.php");
             die();
         }else{
-            $sql = "UPDATE category SET category = '$edit_category' WHERE category_id = $edit_category_id;";
+            $sql = "UPDATE category SET cat_name = '$edit_cat_name' WHERE cat_id = $edit_cat_id;";
             if(mysqli_query($conn, $sql)){
                 header("location: ../category.php");
                 die();
