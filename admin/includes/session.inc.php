@@ -3,7 +3,7 @@
     require_once 'db.inc.php';
     if(isset($_SESSION['admin_id'])){
         $admin_id_session = $_SESSION['admin_id'];
-        $level_session = $_SESSION['level'];
+        $level_session = $_SESSION['user_level'];
         $email_session = $_SESSION['email'];
 
         if(($level_session == 'new_trend')){
