@@ -70,12 +70,12 @@
         <h3 class="text-dark mt-3 text-center">Products</h3>
         <!-- start of container fluid -->
         <div class="container-fluid mt-3">
-            <!-- start of add service modal button -->
-            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#add_service_modal">New <i class="fa-solid fa-plus"></i></button>
-            <!-- end of add service modal button -->
+            <!-- start of add prod modal button -->
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#add_prod_modal">New <i class="fa-solid fa-plus"></i></button>
+            <!-- end of add prod modal button -->
 
-            <!-- start of add service modal -->
-            <div class="modal fade" id="add_service_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <!-- start of add prod modal -->
+            <div class="modal fade" id="add_prod_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header bg-dark text-white">
@@ -98,7 +98,7 @@
                                                 <div class="row">
                                                     <div class="col-md-5 col-6 mt-4">
                                                         <div class="mb-1">
-                                                            <img class="text-dark border border-dark border-5" src="prod_imgs/prod_img_placeholder.jpg" alt="" style="width: 40%; height: 50%;">
+                                                            <img class="text-dark border border-dark border-3" id="add_image" src="prod_imgs/prod_img_placeholder.jpg" alt="" style="width: 260px; height: 174px;">
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="add_prod_img" class="form-label fs-5 ps-2">Select image</label>
@@ -178,7 +178,7 @@
                     </div>
                 </div>
             </div>
-            <!-- end of add service modal -->
+            <!-- end of add prod modal -->
 
             <!-- start of first row -->
             <div class="row">
@@ -199,7 +199,7 @@
                                         <th class="table-light text-uppercase text-center">product name</th>
                                         <th class="table-light text-uppercase text-center">product price</th>
                                         <th class="table-light text-uppercase text-center">product description</th>
-                                        <th class="table-light text-uppercase text-center d-none">prod img</th>
+                                        <th class="table-light text-uppercase text-center">prod img</th>
                                         <th class="table-light text-uppercase text-center">action</th>
                                     </tr>
                                 </thead>
@@ -226,11 +226,11 @@
                                                 <td class="text-center"><?= $prod_name ?></td>
                                                 <td class="text-center"><?= $prod_price ?></td>
                                                 <td class="text-center"><?= $prod_desc ?></td>
-                                                <td class="text-center d-none"><?= $prod_img ?></td>
+                                                <td class="text-center"><?= $prod_img ?></td>
                                                 <td class="text-center">
-                                                    <a class="btn btn-sm btn-primary view" href="#" data-bs-toggle="modal" data-bs-target="#view_service_modal"><i class="fa-solid fa-eye"></i></a> 
-                                                    <a class="btn btn-sm btn-success edit" href="#" data-bs-toggle="modal" data-bs-target="#edit_service_modal"><i class="fa-solid fa-pen-to-square"></i></a>  
-                                                    <a class="btn btn-sm btn-danger delete" href="#" data-bs-toggle="modal" data-bs-target="#delete_service_modal"><i class="fa-solid fa-trash"></i></a>
+                                                    <a class="btn btn-sm btn-primary view" href="#" data-bs-toggle="modal" data-bs-target="#view_prod_modal"><i class="fa-solid fa-eye"></i></a> 
+                                                    <a class="btn btn-sm btn-success edit" href="#" data-bs-toggle="modal" data-bs-target="#edit_prod_modal"><i class="fa-solid fa-pen-to-square"></i></a>  
+                                                    <a class="btn btn-sm btn-danger delete" href="#" data-bs-toggle="modal" data-bs-target="#delete_prod_modal"><i class="fa-solid fa-trash"></i></a>
                                                 </td>
                                             </tr>
                                 <?php
@@ -266,7 +266,7 @@
 
 
     <!-- start of view modal -->
-    <div class="modal fade" id="view_service_modal">
+    <div class="modal fade" id="view_prod_modal">
         <!-- start of view modal dialog -->
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <!-- start of view modal content -->
@@ -367,25 +367,25 @@
     <!-- end of view modal -->
 
     
-    <!-- start of edit service modal -->
-    <div class="modal fade" id="edit_service_modal">
+    <!-- start of edit prod modal -->
+    <div class="modal fade" id="edit_prod_modal">
         <!-- start of edit modal dialog -->
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <!-- start of edit modal content -->
             <div class="modal-content">
                 <!-- start of modal header -->
                 <div class="modal-header bg-dark border-0">
-                    <h4 class="modal-title text-white">Edit service</h4>
+                    <h4 class="modal-title text-white">Edit product</h4>
                     <button type="button" class="btn btn-danger close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
                     </button>
                 </div>
                 <!-- end of modal header -->
                 <!-- start of edit modal form -->
-                <form action="includes/edit-service.inc.php" method="post">
+                <form action="includes/edit-product.inc.php" method="post" enctype="multipart/form-data">
                     <!-- start of edit modal body -->                
                     <div class="modal-body">
-                        <input type="hidden" name="edit_service_id" id="edit_service_id">
+                        <input type="hidden" name="edit_prod_id" id="edit_prod_id">
                         <!-- start of edit modal row -->
                         <div class="row">
                             <!-- start of edit modal col -->
@@ -396,31 +396,61 @@
                                     <div class="card-body">
                                         <!-- start of edit modal row -->
                                         <div class="row">
-                                            <div class="col-md-6 col-6 mt-3">
-                                                <div class="form-group">
-                                                    <label for="edit_service" class="ps-2 pb-2">Service</label>
-                                                    <input type="text" class="form-control" name="edit_service" id="edit_service" value="" required>
+                                            <div class="col-md-5 col-6 mt-4">
+                                                <div class="mb-1">
+                                                    <img class="text-dark border border-dark border-3" id="edit_img" src="prod_imgs/prod_img_placeholder.jpg" alt="" style="width: 260px; height: 174px;">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="edit_prod_img" class="form-label fs-5 ps-2">Select image</label>
+                                                    <input class="form-control" type="file" id="edit_prod_img" name="edit_prod_img">
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 col-6 mt-3">
-                                            </div>
-                                            
-                                            <div class="col-md-12 col-6 mt-3">
-                                                <div class="form-group">
-                                                    <label for="edit_description" class="ps-2 pb-2">Service description</label>
-                                                    <div class="form-floating">
-                                                        <textarea class="form-control pt-1" placeholder="Leave a comment here" id="edit_description" style="height: 100px" name="edit_description"></textarea>
+                                            <div class="col-md-7 col-6 mt-3">
+                                                <div class="col-md-12 col-6">
+                                                    <div class="form-group">
+                                                        <label for="edit_prod_cat" class="ps-2 pb-2 fs-5">Category</label>
+                                                        <select class="form-select" aria-label="Default select example" name="edit_prod_cat" id="edit_prod_cat" required>
+                                                            <option selected disabled>-- Select category --</option>
+                                                            <?php
+                                                                $sql_category = "SELECT * FROM category;";
+                                                                $result_category = mysqli_query($conn, $sql_category);
+                                                                if(mysqli_num_rows($result_category) > 0){
+                                                                    while($row_category = mysqli_fetch_assoc($result_category)){
+                                                                        $cat_id = $row_category['cat_id'];
+                                                                        $cat_name = $row_category['cat_name'];
+                                                                        echo '<option value="' .$cat_id. '">' .$cat_name. '</option>';
+                                                                    }
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12 col-6 mt-3">
+                                                    <div class="form-group">
+                                                        <label for="edit_prod_name" class="ps-2 pb-2 fs-5">Product name</label>
+                                                        <input type="text" class="form-control" name="edit_prod_name" id="edit_prod_name" value="" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12 col-6 mt-3">
+                                                    <div class="form-group">
+                                                        <label for="edit_prod_price" class="ps-2 pb-2 fs-5">Price</label>
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text" id="basic-editon1">₱</span>
+                                                            <input type="number" class="form-control" name="edit_prod_price" id="edit_prod_price" placeholder="" aria-label="" aria-describedby="basic-addon1">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
 
+                                            
                                             <div class="col-md-12 col-6 mt-3">
                                                 <div class="form-group">
-                                                    <label for="edit_price" class="ps-2 pb-2">Price</label>
-                                                    <div class="input-group mb-3">
-                                                        <span class="input-group-text" id="basic-addon1">₱</span>
-                                                        <input type="text" class="form-control" name="edit_price" id="edit_price" placeholder="" aria-label="" aria-describedby="basic-addon1">
+                                                    <label for="edit_prod_desc" class="ps-2 pb-2 fs-5">Product description</label>
+                                                    <div class="form-floating">
+                                                        <textarea class="form-control" placeholder="Leave a comment here" id="edit_prod_desc" style="height: 100px" name="edit_prod_desc"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
