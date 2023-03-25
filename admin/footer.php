@@ -114,7 +114,7 @@
     </script>
     <!-- end of script for view service modal -->
 
-    <!-- start of script for edit service modal -->
+    <!-- start of script for edit prod modal -->
     <script>
         $(document).ready(function () {
             // $('body').on('click', '.edit', function(event) {
@@ -131,14 +131,18 @@
                 console.log(data);
 
                 $('#edit_prod_id').val(data[1]);
-                $('#edit_category').val(data[2]);
-                $('#edit_service').val(data[3]);
-                $('#edit_description').val(data[4]);
-                $('#edit_price').val(data[5]);
+                $('#edit_prod_cat').val(data[0]).change();
+                $('#edit_prod_name').val(data[3]);
+                $('#edit_prod_price').val(data[4]);
+                $('#edit_prod_desc').val(data[5]);
+                // $('#edit_prod_img').val(data[6]);
+                $('#edit_img').attr('src', data[6]).load(function(){
+                    $(this).width(); 
+                });
             });
         });
     </script>
-    <!-- end of script for edit service modal -->
+    <!-- end of script for edit prod modal -->
 
     <!-- start of script for delete service modal -->
     <script>
