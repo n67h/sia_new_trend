@@ -64,7 +64,7 @@
                         echo '<li class="active"><a href="category.php" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-vest"></i> Categories</a></li>';
                     }
                 ?>
-                    <a class="text-decoration-none px-3 py-2 d-block text-white" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"><i class="fa-solid fa-shirt"></i> <span class="me-5">Products</span><i class="fa-solid fa-chevron-down ms-3"></i></a>
+                    <a class="text-decoration-none px-3 py-2 d-block text-white" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"><i class="fa-solid fa-shirt"></i> <span class="me-5">Products</span><i class="fa-solid fa-chevron-down ms-5"></i></a>
                     
                     <div class="collapse" id="collapseExample">
                         <div class="">
