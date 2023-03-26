@@ -249,8 +249,8 @@
                                     <!-- end of delete modal card body -->
                                     <!-- start of delete modal footer -->
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">No</button>
-                                        <button type="submit" name="delete" class="btn btn-danger btn-lg">Yes</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                        <button type="submit" name="delete" class="btn btn-danger">Yes</button>
                                     </div>
                                     <!-- end of delete modal footer -->
                                 </div>
