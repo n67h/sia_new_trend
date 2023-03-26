@@ -144,13 +144,13 @@
     </script>
     <!-- end of script for edit prod modal -->
 
-    <!-- start of script for delete service modal -->
+    <!-- start of script for delete prod modal -->
     <script>
         $(document).ready(function () {
 
             $('body').on('click', '.delete', function(event) {
 
-                $('#delete_service_modal').modal('show');
+                $('#delete_prod_modal').modal('show');
 
                 $tr = $(this).closest('tr');
 
@@ -160,12 +160,12 @@
 
                 console.log(data);
 
-                $('#delete_service_id').val(data[0]);
+                $('#delete_prod_id').val(data[1]);
 
             });
         });
     </script>
-    <!-- end of script for delete service modal -->
+    <!-- end of script for delete prod modal -->
 
     <!-- start of script for view appointment modal -->
     <script>
