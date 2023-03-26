@@ -24,7 +24,7 @@ body {
 
 .sidebar li.active {
     background-color: #404759;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     color: #FFFFFF;
 }
 
@@ -38,7 +38,7 @@ body {
 
 .sidebar li a:hover {
     background-color: #404759;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     color: #FFFFFF;
 }
 
