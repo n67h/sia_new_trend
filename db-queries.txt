@@ -1,13 +1,11 @@
-    email = andrepaul.staclara67@gmail.com
-    password = qweqweqwe
+email = andrepaul.staclara67@gmail.com
+password = qweqweqwe
 
-    SELECT category.*, products.*, color.*, sizes.* FROM products INNER JOIN category USING (cat_id) INNER JOIN color USING (prod_id) INNER JOIN sizes USING (col_id);
+SELECT category.*, products.*, color.*, sizes.* FROM products INNER JOIN category USING (cat_id) INNER JOIN color USING (prod_id) INNER JOIN sizes USING (col_id);
 
-    SELECT category.*, products.* FROM products INNER JOIN category USING (cat_id);
+SELECT category.*, products.* FROM products INNER JOIN category USING (cat_id);
 
-    SELECT products.*, color.*, sizes.* FROM color INNER JOIN products USING (prod_id) INNER JOIN sizes USING (col_id) WHERE products.prod_id = 1;
-
-
+SELECT products.*, color.*, sizes.* FROM color INNER JOIN products USING (prod_id) INNER JOIN sizes USING (col_id) WHERE products.prod_id = 1;
 
 
 
@@ -15,8 +13,38 @@
 
 
 
-    SELECT user_role.user_role_id, user_role.role, user.user_id, user.user_role_id, user.username, user.is_verified, user.last_login, user.date_added AS user_date_added, user.last_updated AS user_last_updated, user_info.user_info_id, user_info.user_id, user_info.email, user_info.phone_number, user_info.first_name, user_info.last_name, user_info.date_added AS user_info_date_added, user_info.last_updated AS user_info_last_updated FROM user_info INNER JOIN user USING (user_id) INNER JOIN user_role USING (user_role_id) WHERE user.is_deleted != 1 ORDER BY user.user_id DESC;
 
-    SELECT category.category_id, category.category, appointment.appointment_id, appointment.user_id, appointment.pet_name, appointment.category_id, appointment.birthdate, appointment.gender, appointment.service_id, appointment.date, appointment.timeslot, appointment.status, appointment.date_added, appointment.last_updated, service.service_id, service.service FROM category INNER JOIN appointment USING (category_id) INNER JOIN service USING (service_id) WHERE appointment.is_deleted != 1 ORDER BY appointment.appointment_id ASC;
 
-    SELECT user_info.user_id, user_info.email, user_info.phone_number, user_info.first_name, user_info.last_name, category.category_id, category.category, appointment.appointment_id, appointment.pet_name, appointment.category_id, appointment.birthdate, appointment.gender, appointment.service_id, appointment.date, appointment.timeslot, appointment.status, appointment.date_added, appointment.last_updated, service.service_id, service.service FROM category INNER JOIN appointment USING (category_id) INNER JOIN service USING (service_id) INNER JOIN user_info USING (user_id) WHERE appointment.is_deleted != 1 ORDER BY appointment.appointment_id DESC;
+SELECT user_role.user_role_id, user_role.role, user.user_id, user.user_role_id, user.username, user.is_verified, user.last_login, user.date_added AS user_date_added, user.last_updated AS user_last_updated, user_info.user_info_id, user_info.user_id, user_info.email, user_info.phone_number, user_info.first_name, user_info.last_name, user_info.date_added AS user_info_date_added, user_info.last_updated AS user_info_last_updated FROM user_info INNER JOIN user USING (user_id) INNER JOIN user_role USING (user_role_id) WHERE user.is_deleted != 1 ORDER BY user.user_id DESC;
+
+SELECT category.category_id, category.category, appointment.appointment_id, appointment.user_id, appointment.pet_name, appointment.category_id, appointment.birthdate, appointment.gender, appointment.service_id, appointment.date, appointment.timeslot, appointment.status, appointment.date_added, appointment.last_updated, service.service_id, service.service FROM category INNER JOIN appointment USING (category_id) INNER JOIN service USING (service_id) WHERE appointment.is_deleted != 1 ORDER BY appointment.appointment_id ASC;
+
+SELECT user_info.user_id, user_info.email, user_info.phone_number, user_info.first_name, user_info.last_name, category.category_id, category.category, appointment.appointment_id, appointment.pet_name, appointment.category_id, appointment.birthdate, appointment.gender, appointment.service_id, appointment.date, appointment.timeslot, appointment.status, appointment.date_added, appointment.last_updated, service.service_id, service.service FROM category INNER JOIN appointment USING (category_id) INNER JOIN service USING (service_id) INNER JOIN user_info USING (user_id) WHERE appointment.is_deleted != 1 ORDER BY appointment.appointment_id DESC;
+
+
+CREATE TABLE product (
+    product_id int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    product varchar(100) NOT NULL
+);
+
+CREATE TABLE color (
+	color_id int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    color varchar(25) NOT NULL
+);
+
+CREATE TABLE size (
+	size_id int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    size varchar(5) NOT NULL
+);
+
+CREATE TABLE stock (
+	stock_id int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    product_id int(11),
+    color_id int(11),
+    size_id int(11),
+    stock int(11) NOT NULL,
+    
+    FOREIGN KEY(product_id) REFERENCES product(product_id) ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY(color_id) REFERENCES color(color_id) ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY(size_id) REFERENCES size(size_id) ON DELETE SET NULL ON UPDATE CASCADE
+);
