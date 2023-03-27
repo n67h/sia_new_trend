@@ -115,12 +115,12 @@
     <!-- end of script for view service modal -->
 
     <!-- start of script for edit prod modal -->
-    <script>
+    <!-- <script>
         $(document).ready(function () {
             // $('body').on('click', '.edit', function(event) {
             $('body').on('click', '.edit', function(event) {
 
-                $('#edit_service_modal').modal('show');
+                $('#edit_prod_modal').modal('show');
 
                 $tr = $(this).closest('tr');
 
@@ -131,9 +131,9 @@
                 console.log(data);
 
                 $('#edit_prod_id').val(data[1]);
-                $('#edit_prod_cat').val(data[0]).change();
+                $('#edit_prod_cat').val('').change();
                 $('#edit_prod_name').val(data[3]);
-                $('#edit_prod_price').val(data[4]);
+                $('#edit_prod_price').val(data[]);
                 $('#edit_prod_desc').val(data[5]);
                 // $('#edit_prod_img').val(data[6]);
                 $('#edit_img').attr('src', data[6]).load(function(){
@@ -141,11 +141,11 @@
                 });
             });
         });
-    </script>
+    </script> -->
     <!-- end of script for edit prod modal -->
 
     <!-- start of script for delete prod modal -->
-    <script>
+    <!-- <script>
         $(document).ready(function () {
 
             $('body').on('click', '.delete', function(event) {
@@ -161,10 +161,11 @@
                 console.log(data);
 
                 $('#delete_prod_id').val(data[1]);
+                $('#delete_prod_img').val(data[6]);
 
             });
         });
-    </script>
+    </script> -->
     <!-- end of script for delete prod modal -->
 
     <!-- start of script for view appointment modal -->
