@@ -2,6 +2,10 @@
     session_start();
     require_once 'db.inc.php';
 
+    if(isset($_GET['cat_id'])){
+        $category_id = $_GET['cat_id'];
+    }
+    
     if(isset($_POST['edit'])){
         $edit_prod_id = mysqli_real_escape_string($conn, $_POST['edit_prod_id']);
         $edit_prod_cat = mysqli_real_escape_string($conn, $_POST['edit_prod_cat']);
@@ -31,19 +35,19 @@
                 function countdown() {
                     var i = document.getElementById("counter");
                     if (parseInt(i.innerHTML)<=0) {
-                        location.href = "../product.php";
+                        location.href = "../product.php?cat_id=' .$category_id. '";
                     }
                     i.innerHTML = parseInt(i.innerHTML)-1;
                 }
                 setInterval(function(){ countdown(); },1000);
             </script>';
             echo $error_redirect;
-            header("refresh:5;url=../product.php");
+            header("refresh:5;url=../product.php?cat_id=" .$category_id);
             die();
         }elseif($_FILES["edit_prod_img"]["error"] == 4){
             $sql = "UPDATE products SET cat_id = $edit_prod_cat, prod_name = '$edit_prod_name', prod_price = $edit_prod_price, prod_desc = '$edit_prod_desc' WHERE prod_id = $edit_prod_id;";
             if(mysqli_query($conn, $sql)){
-                header("location: ../product.php");
+                header("location: ../product.php?cat_id=" .$category_id);
                 die();
             }
         }else{
@@ -57,7 +61,7 @@
 
                         $sql = "UPDATE products SET cat_id = $edit_prod_cat, prod_name = '$edit_prod_name', prod_price = $edit_prod_price, prod_desc = '$edit_prod_desc', prod_img = '$file_destination' WHERE prod_id = $edit_prod_id;";
                         if(mysqli_query($conn, $sql)){
-                            header("location: ../product.php");
+                            header("location: ../product.php?cat_id=" .$category_id);
                             die();
                         }
                     }else {
@@ -71,6 +75,6 @@
             }
         }
     }else{
-        header("location: ../product.php");
+        header("location: ../product.php?cat_id=" .$category_id);
         die();
     }
