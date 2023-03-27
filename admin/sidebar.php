@@ -24,7 +24,8 @@
                             while($row_level = mysqli_fetch_assoc($result_level)){
                                 $level = $row_level['user_level'];
                             }
-                            echo '<h1 class="fs-4"><a href="dashboard.php" class="text-decoration-none"><span class="axgg text-white rounded shadow px-2 me-2 p-1">AXGG</span><span class="text-white text-uppercase">' .$level. '</span></a></h1>';
+                            echo '<h1 class="fs-4"><a href="dashboard.php" class="text-decoration-none"><span class="axgg text-white rounded shadow px-2 me-2 p-1">AXGG</span></a></h1>';
+                            // <span class="text-white text-uppercase">' .$level. '</span>
                             // echo '<h1 class="fs-4"><a href="dashboard.php" class="text-decoration-none"><span class="bg-white text-dark rounded shadow px-2 me-2 p-1">AXGG</span><span class="text-white">Clinic</span></a></h1>';
                         }
                     }
@@ -71,9 +72,9 @@
                             <ul class="list-unstyled px-2">
                 <?php
                                 if($url !== 'localhost/sia/admin/product.php'){
-                                    echo '<li class=""><a href="product.php" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-shirt"></i> Products</a></li>';
+                                    echo '<li class=""><a href="product.php?cat_id=0" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-shirt"></i> Products</a></li>';
                                 }else{
-                                    echo '<li class="active"><a href="product.php" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-shirt"></i> Products</a></li>';
+                                    echo '<li class="active"><a href="product.php?cat_id=0" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-shirt"></i> Products</a></li>';
                                 }
 
                                 if($url !== 'localhost/sia/admin/color.php'){
