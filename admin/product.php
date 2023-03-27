@@ -1,3 +1,8 @@
+<?php
+    if(isset($_GET['cat_id'])){
+        $category_id = $_GET['cat_id'];
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,9 +75,36 @@
         <h3 class="text-dark mt-3 text-center">Products</h3>
         <!-- start of container fluid -->
         <div class="container-fluid mt-3">
-            <!-- start of add prod modal button -->
-            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#add_prod_modal">New <i class="fa-solid fa-plus"></i></button>
-            <!-- end of add prod modal button -->
+            <div class="d-flex flex-row">
+                    <!-- start of add prod modal button -->
+                    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#add_prod_modal">New <i class="fa-solid fa-plus"></i></button>
+                    <!-- end of add prod modal button -->
+    
+                    <!-- start of category dropdown -->
+                    <div class="dropdown ms-3">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Sort by category</button>
+                        <ul class="dropdown-menu">
+                            <li class=""><a class="dropdown-item text-dark sort-category" href="product.php?cat_id=0">All</a></li>
+                            <?php
+                                $query = "SELECT * FROM category;";
+                                $result = mysqli_query($conn, $query);
+                                if(mysqli_num_rows($result) > 0){
+                                    while($row = mysqli_fetch_assoc($result)){
+                                        $sort_cat_id = $row['cat_id'];
+                                        $sort_cat_name = $row['cat_name'];
+                                        echo '<li class=""><a class="dropdown-item text-dark sort-category" href="product.php?cat_id=' .$sort_cat_id. '">' .$sort_cat_name. '</a></li>';
+                                    }
+                                }else{
+                                    echo '<li class=""><a class="dropdown-item text-dark sort-category" href="#">No categories found</a></li>';
+                                }
+                            ?>
+                            <!-- <li class=""><a class="dropdown-item text-dark sort-category" href="#">Action</a></li> -->
+                            <!-- <li class=""><a class="dropdown-item text-dark sort-category" href="#">Another action</a></li> -->
+                            <!-- <li class=""><a class="dropdown-item text-dark sort-category" href="#">Something else here</a></li> -->
+                        </ul>
+                    </div>
+                    <!-- end of category dropdown -->
+            </div>
 
             <!-- start of add prod modal -->
             <div class="modal fade" id="add_prod_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -193,13 +225,13 @@
                                 <!-- start of table header -->
                                 <thead>
                                     <tr>
-                                        <th class="table-light text-uppercase text-center d-none">cat id</th>
+                                        <th class="table-light text-uppercase text-center">cat id</th>
                                         <th class="table-light text-uppercase text-center">product id</th>
-                                        <th class="table-light text-uppercase text-center">cat name</th>
-                                        <th class="table-light text-uppercase text-center">product name</th>
-                                        <th class="table-light text-uppercase text-center">product price</th>
-                                        <th class="table-light text-uppercase text-center">product description</th>
-                                        <th class="table-light text-uppercase text-center">prod img</th>
+                                        <th class="table-light text-uppercase text-center">category</th>
+                                        <th class="table-light text-uppercase text-center">product</th>
+                                        <th class="table-light text-uppercase text-center">price</th>
+                                        <th class="table-light text-uppercase text-center">description</th>
+                                        <th class="table-light text-uppercase text-center d-none">prod img</th>
                                         <th class="table-light text-uppercase text-center">action</th>
                                     </tr>
                                 </thead>
@@ -207,7 +239,11 @@
                                 <!-- start of table body -->
                                 <tbody>
                                 <?php
-                                    $sql_select = "SELECT category.*, products.* FROM products INNER JOIN category USING (cat_id);";
+                                    if($category_id == 0){
+                                        $sql_select = "SELECT category.*, products.* FROM products INNER JOIN category USING (cat_id);";
+                                    }else{
+                                        $sql_select = "SELECT category.*, products.* FROM products INNER JOIN category USING (cat_id) WHERE category.cat_id = $category_id;";
+                                    }
                                     $result_select = mysqli_query($conn, $sql_select);
                                     if(mysqli_num_rows($result_select) > 0){
                                         while($row_select = mysqli_fetch_assoc($result_select)){
@@ -220,17 +256,244 @@
                                             $prod_img = $row_select['prod_img'];
                                 ?>
                                             <tr>
-                                                <td class="text-center d-none"><?= $cat_id ?></td>
+                                                <td class="text-center"><?= $cat_id ?></td>
                                                 <td class="text-center"><?= $prod_id ?></td>
                                                 <td class="text-center"><?= $cat_name ?></td>
                                                 <td class="text-center"><?= $prod_name ?></td>
-                                                <td class="text-center"><?= $prod_price ?></td>
+                                                <td class="text-center">₱<?= number_format($prod_price, 2, '.', ',') ?></td>
                                                 <td class="text-center"><?= $prod_desc ?></td>
-                                                <td class="text-center"><?= $prod_img ?></td>
-                                                <td class="text-center">
-                                                    <a class="btn btn-sm btn-primary view" href="#" data-bs-toggle="modal" data-bs-target="#view_prod_modal"><i class="fa-solid fa-eye"></i></a> 
-                                                    <a class="btn btn-sm btn-success edit" href="#" data-bs-toggle="modal" data-bs-target="#edit_prod_modal"><i class="fa-solid fa-pen-to-square"></i></a>  
-                                                    <a class="btn btn-sm btn-danger delete" href="#" data-bs-toggle="modal" data-bs-target="#delete_prod_modal"><i class="fa-solid fa-trash"></i></a>
+                                                <td class="text-center d-none"><?= $prod_img ?></td>
+                                                <td class="">
+
+                                                    <!-- btn for view prod modal -->
+                                                    <a class="btn btn-sm btn-primary view" href="#" data-bs-toggle="modal" data-bs-target="#view_prod_modal<?= $prod_id ?>"><i class="fa-solid fa-eye"></i></a> 
+                                                    <!-- start of view modal -->
+                                                    <div class="modal fade" id="view_prod_modal<?= $prod_id ?>">
+                                                        <!-- start of view modal dialog -->
+                                                        <div class="modal-dialog modal-xl modal-dialog-centered">
+                                                            <!-- start of view modal content -->
+                                                            <div class="modal-content">
+                                                                <!-- start of modal header -->
+                                                                <div class="modal-header bg-dark border-0">
+                                                                    <h4 class="modal-title text-white">View product</h4>
+                                                                    <button type="button" class="btn btn-danger close" data-bs-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
+                                                                    </button>
+                                                                </div>
+                                                                <!-- end of modal header -->
+                                                                <!-- start of view modal form -->
+                                                                <form action="" method="post" enctype="multipart/form-data">
+                                                                    <!-- start of view modal body -->                
+                                                                    <div class="modal-body">
+                                                                        <input type="hidden" name="view_prod_id" id="view_prod_id">
+                                                                        <!-- start of view modal row -->
+                                                                        <div class="row">
+                                                                            <!-- start of view modal col -->
+                                                                            <div class="col-md-12">
+                                                                                <!-- start of view modal card -->
+                                                                                <div class="card card-primary">
+                                                                                    <!-- start of view modal card body -->
+                                                                                    <div class="card-body">
+                                                                                        <!-- start of view modal row -->
+                                                                                        <div class="row">
+                                                                                            
+                                                                                        </div>
+                                                                                        <!-- end of view modal row -->
+                                                                                    </div>
+                                                                                    <!-- end of view modal card body -->
+                                                                                    <!-- start of view modal footer -->
+                                                                                    <div class="modal-footer justify-content-between">
+                                                                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                                                                    </div>
+                                                                                    <!-- end of view modal footer -->
+                                                                                </div>
+                                                                                <!-- end of view modal card -->
+                                                                            </div>
+                                                                            <!-- end of view modal col -->
+                                                                        </div>
+                                                                        <!-- end of view modal row -->
+                                                                    </div>
+                                                                    <!-- end of view modal body -->                
+                                                                </form>
+                                                                <!-- end of view modal form -->
+                                                            </div>
+                                                            <!-- end of view modal content -->
+                                                        </div>
+                                                        <!-- end of view modal dialog -->
+                                                    </div>
+                                                    <!-- end of view modal -->
+
+                                                    <!-- btn for edit prod modal -->
+                                                    <a class="btn btn-sm btn-success edit" href="#" data-bs-toggle="modal" data-bs-target="#edit_prod_modal<?= $prod_id ?>"><i class="fa-solid fa-pen-to-square"></i></a>  
+                                                    <!-- start of edit prod modal -->
+                                                    <div class="modal fade" id="edit_prod_modal<?= $prod_id ?>">
+                                                        <!-- start of edit modal dialog -->
+                                                        <div class="modal-dialog modal-xl modal-dialog-centered">
+                                                            <!-- start of edit modal content -->
+                                                            <div class="modal-content">
+                                                                <!-- start of modal header -->
+                                                                <div class="modal-header bg-dark border-0">
+                                                                    <h4 class="modal-title text-white">Edit product</h4>
+                                                                    <button type="button" class="btn btn-danger close" data-bs-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
+                                                                    </button>
+                                                                </div>
+                                                                <!-- end of modal header -->
+                                                                <!-- start of edit modal form -->
+                                                                <form action="includes/edit-product.inc.php?cat_id=<?= $category_id ?>" method="post" enctype="multipart/form-data">
+                                                                    <!-- start of edit modal body -->                
+                                                                    <div class="modal-body">
+                                                                        <input type="hidden" name="edit_prod_id" id="edit_prod_id" value="<?= $prod_id ?>">
+                                                                        <!-- start of edit modal row -->
+                                                                        <div class="row">
+                                                                            <!-- start of edit modal col -->
+                                                                            <div class="col-md-12">
+                                                                                <!-- start of edit modal card -->
+                                                                                <div class="card card-primary">
+                                                                                    <!-- start of edit modal card body -->
+                                                                                    <div class="card-body">
+                                                                                        <!-- start of edit modal row -->
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-5 col-6 mt-4">
+                                                                                                <div class="mb-1">
+                                                                                                    <img class="text-dark border border-dark border-3" id="edit_img" src="<?= $prod_img ?>" alt="" style="width: 260px; height: 174px;">
+                                                                                                </div>
+                                                                                                <div class="mb-3">
+                                                                                                    <label for="edit_prod_img" class="form-label fs-5 ps-2">Select image</label>
+                                                                                                    <input class="form-control" type="file" id="edit_prod_img" name="edit_prod_img">
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="col-md-7 col-6 mt-3">
+                                                                                                <div class="col-md-12 col-6">
+                                                                                                    <div class="form-group">
+                                                                                                        <label for="edit_prod_cat" class="ps-2 pb-2 fs-5">Category</label>
+                                                                                                        <select class="form-select" aria-label="Default select example" name="edit_prod_cat" id="edit_prod_cat" required>
+                                                                                                            <?php
+                                                                                                                echo '<option value="' .$cat_id. '" selected>' .$cat_name. '</option>';
+                                                                                                                
+                                                                                                                $sql_category = "SELECT * FROM category WHERE cat_id != $cat_id;";
+                                                                                                                $result_category = mysqli_query($conn, $sql_category);
+                                                                                                                if(mysqli_num_rows($result_category) > 0){
+                                                                                                                    while($row_category = mysqli_fetch_assoc($result_category)){
+                                                                                                                        $cat_id = $row_category['cat_id'];
+                                                                                                                        $cat_name = $row_category['cat_name'];
+                                                                                                                        echo '<option value="' .$cat_id. '">' .$cat_name. '</option>';
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            ?>
+                                                                                                        </select>
+                                                                                                    </div>
+                                                                                                </div>
+
+                                                                                                <div class="col-md-12 col-6 mt-3">
+                                                                                                    <div class="form-group">
+                                                                                                        <label for="edit_prod_name" class="ps-2 pb-2 fs-5">Product name</label>
+                                                                                                        <input type="text" class="form-control" name="edit_prod_name" id="edit_prod_name" value="<?= $prod_name ?>" required>
+                                                                                                    </div>
+                                                                                                </div>
+
+                                                                                                <div class="col-md-12 col-6 mt-3">
+                                                                                                    <div class="form-group">
+                                                                                                        <label for="edit_prod_price" class="ps-2 pb-2 fs-5">Price</label>
+                                                                                                        <div class="input-group mb-3">
+                                                                                                            <span class="input-group-text" id="basic-editon1">₱</span>
+                                                                                                            <input type="number" class="form-control" name="edit_prod_price" id="edit_prod_price" placeholder="" aria-label="" aria-describedby="basic-addon1" value="<?= $prod_price ?>" required>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                    
+                                                                                            <div class="col-md-12 col-6 mt-3">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="edit_prod_desc" class="ps-2 pb-2 fs-5">Product description</label>
+                                                                                                    <div class="form-floating">
+                                                                                                        <textarea class="form-control" placeholder="Leave a comment here" id="edit_prod_desc" style="height: 100px" name="edit_prod_desc" value="" required><?= $prod_desc ?></textarea>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <!-- end of edit modal row -->
+                                                                                    </div>
+                                                                                    <!-- end of edit modal card body -->
+                                                                                    <!-- start of edit modal footer -->
+                                                                                    <div class="modal-footer justify-content-between">
+                                                                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                                                                        <button type="submit" name="edit" class="btn btn-success">Save Changes</button>
+                                                                                    </div>
+                                                                                    <!-- end of edit modal footer -->
+                                                                                </div>
+                                                                                <!-- end of edit modal card -->
+                                                                            </div>
+                                                                            <!-- end of edit modal col -->
+                                                                        </div>
+                                                                        <!-- end of edit modal row -->
+                                                                    </div>
+                                                                    <!-- end of edit modal body -->                
+                                                                </form>
+                                                                <!-- end of edit modal form -->
+                                                            </div>
+                                                            <!-- end of edit modal content -->
+                                                        </div>
+                                                        <!-- end of edit modal dialog -->
+                                                    </div>
+                                                    <!-- end of edit prod modal -->
+
+                                                    <!-- btn for delete prod modal -->
+                                                    <a class="btn btn-sm btn-danger delete" href="#" data-bs-toggle="modal" data-bs-target="#delete_prod_modal<?= $prod_id ?>"><i class="fa-solid fa-trash"></i></a>
+                                                    <!-- start of delete prod modal -->
+                                                    <div class="modal fade" id="delete_prod_modal<?= $prod_id ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header bg-dark text-white">
+                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete product</h1>
+                                                                    <button type="button" class="btn btn-danger close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span></button>
+                                                                </div>
+                                                                <!-- start of delete modal form -->
+                                                                <form action="includes/delete-product.inc.php?cat_id=<?= $category_id ?>" method="post">
+                                                                    <!-- start of delete modal body -->                
+                                                                    <div class="modal-body">
+                                                                        <!-- start of delete modal row -->
+                                                                        <div class="row">
+                                                                            <!-- start of delete modal col -->
+                                                                            <div class="col-md-12">
+                                                                                <!-- start of delete modal card -->
+                                                                                <div class="card card-primary">
+                                                                                    <!-- start of delete modal card body -->
+                                                                                    <div class="card-body">
+                                                                                        <!-- start of delete modal row -->
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-12 col-12 mt-3">
+                                                                                                <div class="form-group">
+                                                                                                    <input type="text" name="delete_prod_id" id="delete_prod_id" class="form-control mb-3" value="<?= $prod_id ?>">
+                                                                                                    <input type="text" name="delete_prod_img" id="delete_prod_img" class="form-control mb-3" value="<?= $prod_img ?>">
+                                                                                                    <h5 class="fs-5">Are you sure you want to delete this product?</h5>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <!-- end of delete modal row -->
+                                                                                    </div>
+                                                                                    <!-- end of delete modal card body -->
+                                                                                    <!-- start of delete modal footer -->
+                                                                                    <div class="modal-footer">
+                                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                                                                        <button type="submit" name="delete" class="btn btn-danger">Yes</button>
+                                                                                    </div>
+                                                                                    <!-- end of delete modal footer -->
+                                                                                </div>
+                                                                                <!-- end of delete modal card -->
+                                                                            </div>
+                                                                            <!-- end of delete modal col -->
+                                                                        </div>
+                                                                        <!-- end of delete modal row -->
+                                                                    </div>
+                                                                    <!-- end of delete modal body -->                
+                                                                </form>
+                                                                <!-- end of delete modal form -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- end of delete prod modal -->
                                                 </td>
                                             </tr>
                                 <?php
@@ -263,277 +526,6 @@
         <!-- end of container fluid -->
     </div>
     <!-- end of first container -->
-
-
-    <!-- start of view modal -->
-    <div class="modal fade" id="view_prod_modal">
-        <!-- start of view modal dialog -->
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <!-- start of view modal content -->
-            <div class="modal-content">
-                <!-- start of modal header -->
-                <div class="modal-header bg-dark border-0">
-                    <h4 class="modal-title text-white">View service</h4>
-                    <button type="button" class="btn btn-danger close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
-                    </button>
-                </div>
-                <!-- end of modal header -->
-                <!-- start of view modal form -->
-                <form action="" method="post">
-                    <!-- start of view modal body -->                
-                    <div class="modal-body">
-                        <input type="hidden" name="view_service_id" id="view_service_id">
-                        <!-- start of view modal row -->
-                        <div class="row">
-                            <!-- start of view modal col -->
-                            <div class="col-md-12">
-                                <!-- start of view modal card -->
-                                <div class="card card-primary">
-                                    <!-- start of view modal card body -->
-                                    <div class="card-body">
-                                        <!-- start of view modal row -->
-                                        <div class="row">
-                                            <div class="col-md-6 col-6 mt-3">
-                                                <div class="form-group">
-                                                    <label for="view_category" class="ps-2 pb-2">Category</label>
-                                                    <input type="text" class="form-control" name="view_category" id="view_category" value="" disabled>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 col-6 mt-3">
-                                                <div class="form-group">
-                                                    <label for="view_service" class="ps-2 pb-2">Service</label>
-                                                    <input type="text" class="form-control" name="view_service" id="view_service" value="" disabled>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="col-md-12 col-6 mt-3">
-                                                <div class="form-group">
-                                                    <label for="view_description" class="ps-2 pb-2">Service description</label>
-                                                    <div class="form-floating">
-                                                        <textarea class="form-control p-3" placeholder="Leave a comment here" id="view_description" style="height: 100px" name="view_description" disabled></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="col-md-12 col-6 mt-3">
-                                                <div class="form-group">
-                                                    <label for="view_price" class="ps-2 pb-2">Price</label>
-                                                    <div class="input-group mb-3">
-                                                        <span class="input-group-text" id="basic-addon1">₱</span>
-                                                        <input type="text" class="form-control" name="view_price" id="view_price" placeholder="" aria-label="" aria-describedby="basic-addon1" disabled>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 col-6 mt-3">
-                                                <div class="form-group">
-                                                    <label for="view_service_date_added" class="ps-2 pb-2">Date added</label>
-                                                    <input type="text" class="form-control" name="view_service_date_added" id="view_service_date_added" value="" disabled>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 col-6 mt-3">
-                                                <div class="form-group">
-                                                    <label for="view_service_last_updated" class="ps-2 pb-2">Last updated</label>
-                                                    <input type="text" class="form-control" name="view_service_last_updated" id="view_service_last_updated" value="" disabled>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- end of view modal row -->
-                                    </div>
-                                    <!-- end of view modal card body -->
-                                    <!-- start of view modal footer -->
-                                    <div class="modal-footer justify-content-between">
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                    </div>
-                                    <!-- end of view modal footer -->
-                                </div>
-                                <!-- end of view modal card -->
-                            </div>
-                            <!-- end of view modal col -->
-                        </div>
-                        <!-- end of view modal row -->
-                    </div>
-                    <!-- end of view modal body -->                
-                </form>
-                <!-- end of view modal form -->
-            </div>
-            <!-- end of view modal content -->
-        </div>
-        <!-- end of view modal dialog -->
-    </div>
-    <!-- end of view modal -->
-
-    
-    <!-- start of edit prod modal -->
-    <div class="modal fade" id="edit_prod_modal">
-        <!-- start of edit modal dialog -->
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <!-- start of edit modal content -->
-            <div class="modal-content">
-                <!-- start of modal header -->
-                <div class="modal-header bg-dark border-0">
-                    <h4 class="modal-title text-white">Edit product</h4>
-                    <button type="button" class="btn btn-danger close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
-                    </button>
-                </div>
-                <!-- end of modal header -->
-                <!-- start of edit modal form -->
-                <form action="includes/edit-product.inc.php" method="post" enctype="multipart/form-data">
-                    <!-- start of edit modal body -->                
-                    <div class="modal-body">
-                        <input type="hidden" name="edit_prod_id" id="edit_prod_id">
-                        <!-- start of edit modal row -->
-                        <div class="row">
-                            <!-- start of edit modal col -->
-                            <div class="col-md-12">
-                                <!-- start of edit modal card -->
-                                <div class="card card-primary">
-                                    <!-- start of edit modal card body -->
-                                    <div class="card-body">
-                                        <!-- start of edit modal row -->
-                                        <div class="row">
-                                            <div class="col-md-5 col-6 mt-4">
-                                                <div class="mb-1">
-                                                    <img class="text-dark border border-dark border-3" id="edit_img" src="prod_imgs/prod_img_placeholder.jpg" alt="" style="width: 260px; height: 174px;">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="edit_prod_img" class="form-label fs-5 ps-2">Select image</label>
-                                                    <input class="form-control" type="file" id="edit_prod_img" name="edit_prod_img">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-7 col-6 mt-3">
-                                                <div class="col-md-12 col-6">
-                                                    <div class="form-group">
-                                                        <label for="edit_prod_cat" class="ps-2 pb-2 fs-5">Category</label>
-                                                        <select class="form-select" aria-label="Default select example" name="edit_prod_cat" id="edit_prod_cat" required>
-                                                            <option selected disabled>-- Select category --</option>
-                                                            <?php
-                                                                $sql_category = "SELECT * FROM category;";
-                                                                $result_category = mysqli_query($conn, $sql_category);
-                                                                if(mysqli_num_rows($result_category) > 0){
-                                                                    while($row_category = mysqli_fetch_assoc($result_category)){
-                                                                        $cat_id = $row_category['cat_id'];
-                                                                        $cat_name = $row_category['cat_name'];
-                                                                        echo '<option value="' .$cat_id. '">' .$cat_name. '</option>';
-                                                                    }
-                                                                }
-                                                            ?>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-12 col-6 mt-3">
-                                                    <div class="form-group">
-                                                        <label for="edit_prod_name" class="ps-2 pb-2 fs-5">Product name</label>
-                                                        <input type="text" class="form-control" name="edit_prod_name" id="edit_prod_name" value="" required>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-12 col-6 mt-3">
-                                                    <div class="form-group">
-                                                        <label for="edit_prod_price" class="ps-2 pb-2 fs-5">Price</label>
-                                                        <div class="input-group mb-3">
-                                                            <span class="input-group-text" id="basic-editon1">₱</span>
-                                                            <input type="number" class="form-control" name="edit_prod_price" id="edit_prod_price" placeholder="" aria-label="" aria-describedby="basic-addon1">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            
-                                            <div class="col-md-12 col-6 mt-3">
-                                                <div class="form-group">
-                                                    <label for="edit_prod_desc" class="ps-2 pb-2 fs-5">Product description</label>
-                                                    <div class="form-floating">
-                                                        <textarea class="form-control" placeholder="Leave a comment here" id="edit_prod_desc" style="height: 100px" name="edit_prod_desc"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- end of edit modal row -->
-                                    </div>
-                                    <!-- end of edit modal card body -->
-                                    <!-- start of edit modal footer -->
-                                    <div class="modal-footer justify-content-between">
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" name="edit" class="btn btn-success">Save Changes</button>
-                                    </div>
-                                    <!-- end of edit modal footer -->
-                                </div>
-                                <!-- end of edit modal card -->
-                            </div>
-                            <!-- end of edit modal col -->
-                        </div>
-                        <!-- end of edit modal row -->
-                    </div>
-                    <!-- end of edit modal body -->                
-                </form>
-                <!-- end of edit modal form -->
-            </div>
-            <!-- end of edit modal content -->
-        </div>
-        <!-- end of edit modal dialog -->
-    </div>
-    <!-- end of edit prod modal -->
-
-
-    <!-- start of delete prod modal -->
-    <div class="modal fade" id="delete_prod_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete product</h1>
-                    <button type="button" class="btn btn-danger close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span></button>
-                </div>
-                <!-- start of delete modal form -->
-                <form action="includes/delete-product.inc.php" method="post">
-                    <!-- start of delete modal body -->                
-                    <div class="modal-body">
-                        <!-- start of delete modal row -->
-                        <div class="row">
-                            <!-- start of delete modal col -->
-                            <div class="col-md-12">
-                                <!-- start of delete modal card -->
-                                <div class="card card-primary">
-                                    <!-- start of delete modal card body -->
-                                    <div class="card-body">
-                                        <!-- start of delete modal row -->
-                                        <div class="row">
-                                            <div class="col-md-12 col-12 mt-3">
-                                                <div class="form-group">
-                                                    <input type="hidden" name="delete_prod_id" id="delete_prod_id" class="form-control mb-3">
-                                                    <h5 class="fs-5">Are you sure you want to delete this product?</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- end of delete modal row -->
-                                    </div>
-                                    <!-- end of delete modal card body -->
-                                    <!-- start of delete modal footer -->
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                        <button type="submit" name="delete" class="btn btn-danger">Yes</button>
-                                    </div>
-                                    <!-- end of delete modal footer -->
-                                </div>
-                                <!-- end of delete modal card -->
-                            </div>
-                            <!-- end of delete modal col -->
-                        </div>
-                        <!-- end of delete modal row -->
-                    </div>
-                    <!-- end of delete modal body -->                
-                </form>
-                <!-- end of delete modal form -->
-            </div>
-        </div>
-    </div>
-    <!-- end of delete prod modal -->
     <?php
         require_once 'footer.php';
     ?>
