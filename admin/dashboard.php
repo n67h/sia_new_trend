@@ -11,8 +11,22 @@
 
     <div class="container">
         <?php
-            $escaped_url = htmlspecialchars( $url, ENT_QUOTES, 'UTF-8' );
-            echo '<a href="' . $escaped_url . '">' . $escaped_url . '</a>';
+            $escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+            echo '<a href="' . $escaped_url . '">' . $escaped_url . '</a><br>';
+
+            // get the current url
+            $url =  "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+            // parse url
+            $parts = parse_url($url);
+            // get the 'account' folder path in url
+            $path_parts = explode('/', $parts['path']);
+            echo $path = $path_parts[0] . '<br>';
+            echo $path = $path_parts[1] . '<br>';
+            echo $path = $path_parts[2] . '<br>';
+            echo $path = $path_parts[3] . '<br>';
+
+            // check if the url is currently in account folder
+            // echo $path;
         ?>
     </div>
 
