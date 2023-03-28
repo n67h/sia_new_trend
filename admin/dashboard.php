@@ -18,15 +18,13 @@
             $url =  "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
             // parse url
             $parts = parse_url($url);
-            // get the 'account' folder path in url
+            // fetch all the sub folders in url
             $path_parts = explode('/', $parts['path']);
             echo $path = $path_parts[0] . '<br>';
             echo $path = $path_parts[1] . '<br>';
             echo $path = $path_parts[2] . '<br>';
             echo $path = $path_parts[3] . '<br>';
 
-            // check if the url is currently in account folder
-            // echo $path;
         ?>
     </div>
 
