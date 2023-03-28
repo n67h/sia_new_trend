@@ -40,6 +40,21 @@
         } );
     </script>
 
+    <script type="text/javascript">
+       $(document).ready( function () {
+            $('#datatable_color').DataTable({
+                "responsive": false, 
+                "lengthChange": true, 
+                "autoWidth": false,
+                "searching": true,
+                "paging": true,
+                "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+                "iDisplayLength": 10,
+                "ordering": true,
+            });
+        } );
+    </script>
+
     <!-- start of script for edit category modal -->
     <script>
         $(document).ready(function () {
