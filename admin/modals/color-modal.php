@@ -6,7 +6,7 @@
         <div class="modal-content">
             <!-- start of modal header -->
             <div class="modal-header bg-dark border-0">
-                <h4 class="modal-title text-white">Product colors</h4>
+                <h4 class="modal-title text-white"><?= $prod_name ?></h4>
                 <button type="button" class="btn btn-danger close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
                 </button>
