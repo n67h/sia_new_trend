@@ -80,16 +80,10 @@
                                 }else{
                                     echo '<li class="active"><a href="product.php?cat_id=0" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-shirt"></i> Products</a></li>';
                                 }
-                                // if($url !== 'localhost/sia/admin/product.php?cat_id=0'){
-                                //     echo '<li class=""><a href="product.php?cat_id=0" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-shirt"></i> Products</a></li>';
-                                // }else{
-                                //     echo '<li class="active"><a href="product.php?cat_id=0" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-shirt"></i> Products</a></li>';
-                                // }
-
-                                if($url !== 'localhost/sia/admin/color.php'){
-                                    echo '<li class=""><a href="color.php" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-palette"></i> Colors</a></li>';
+                                if($path_parts[3] !== 'color.php'){
+                                    echo '<li class=""><a href="color.php?prod_id=0" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-palette"></i> Colors</a></li>';
                                 }else{
-                                    echo '<li class="active"><a href="color.php" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-palette"></i> Colors</a></li>';
+                                    echo '<li class="active"><a href="color.php?prod_id=0" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-palette"></i> Colors</a></li>';
                                 }
 
                                 if($url !== 'localhost/sia/admin/size.php'){
