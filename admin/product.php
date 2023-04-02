@@ -76,13 +76,9 @@
         <!-- start of container fluid -->
         <div class="container-fluid mt-3">
             <div class="d-flex flex-row">
-                    <!-- start of add prod modal button -->
-                    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#add_prod_modal">New <i class="fa-solid fa-plus"></i></button>
-                    <!-- end of add prod modal button -->
-    
                     <!-- start of category dropdown -->
-                    <div class="dropdown ms-3">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Sort by category</button>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Sort by category</button>
                         <ul class="dropdown-menu">
                             <li class=""><a class="dropdown-item text-dark sort-category" href="product.php?cat_id=0">All</a></li>
                             <?php
@@ -98,12 +94,14 @@
                                     echo '<li class=""><a class="dropdown-item text-dark sort-category" href="#">No categories found</a></li>';
                                 }
                             ?>
-                            <!-- <li class=""><a class="dropdown-item text-dark sort-category" href="#">Action</a></li> -->
-                            <!-- <li class=""><a class="dropdown-item text-dark sort-category" href="#">Another action</a></li> -->
-                            <!-- <li class=""><a class="dropdown-item text-dark sort-category" href="#">Something else here</a></li> -->
                         </ul>
                     </div>
                     <!-- end of category dropdown -->
+
+                    <!-- start of add prod modal button -->
+                    <button type="button" class="btn btn-primary mb-3 ms-3" data-bs-toggle="modal" data-bs-target="#add_prod_modal">New <i class="fa-solid fa-plus"></i></button>
+                    <!-- end of add prod modal button -->
+    
             </div>
 
             <!-- start of add prod modal -->
@@ -267,17 +265,15 @@
                                                     <!-- btn for edit prod modal -->
                                                     <a class="btn btn-sm btn-success edit" href="#" data-bs-toggle="modal" data-bs-target="#edit_prod_modal<?= $prod_id ?>"><i class="fa-solid fa-pen-to-square"></i></a>  
                                                     <?php
-                                                        require 'modals/edit-product-modal.php';
+                                                        require 'modals/edit-product.modal.php';
                                                     ?>
                                                     <!-- btn for prod color modal -->
-                                                    <a class="btn btn-sm btn-primary color" href="#" data-bs-toggle="modal" data-bs-target="#color_modal<?= $prod_id ?>"><i class="fa-solid fa-palette"></i></a> 
-                                                    <?php
-                                                        require 'modals/color-modal.php';
-                                                    ?>
+                                                    <a class="btn btn-sm btn-primary color" href="color.php?prod_id=<?= $prod_id ?>"><i class="fa-solid fa-palette"></i></a>
+                                                    
                                                     <!-- btn for delete prod modal -->
                                                     <a class="btn btn-sm btn-danger delete" href="#" data-bs-toggle="modal" data-bs-target="#delete_prod_modal<?= $prod_id ?>"><i class="fa-solid fa-trash"></i></a>
                                                     <?php
-                                                        require 'modals/delete-product-modal.php';
+                                                        require 'modals/delete-product.modal.php';
                                                     ?>
                                                 </td>
                                             </tr>
