@@ -75,6 +75,6 @@
             }
         }
     }else{
-        header("location: ../product.php?cat_id=" .$category_id);
+        header("location: ../product.php?cat_id=0");
         die();
     }
